@@ -9,7 +9,7 @@ export const StyleMenu = styled.div`
 
          select {
            height: 35px;
-           width: 100px;
+           width: 80px;
            border-radius: 5px;
            align-self: center;
          }
