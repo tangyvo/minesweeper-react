@@ -15,13 +15,12 @@ const App = () => {
   const [level, setLevel] = useState(9);
   const [grid, setGrid] = useState([]);
   const [bombs, setBombs] = useState([]);
-  const bombCount = level * 2;
+  let bombCount = level * 2;
   const [clickCount, setClickCount] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  let countdown;
 
   // reset game when switching levels
   useEffect(() => {
@@ -29,18 +28,14 @@ const App = () => {
   }, [level]);
 
   const reset = () => {
-    setBombs([]);
     setGameOver(false);
     setGameWon(false);
     setIsPlaying(false);
+    setClickCount(0);
     setTimer(0);
     calcBomb();
     updateGrid();
   };
-
-  useEffect(() => {
-    clearInterval(countdown);
-  }, [gameOver, gameWon])
 
   const levelChange = (e) => {
     setLevel(e.target.value);
@@ -77,13 +72,23 @@ const App = () => {
   };
 
   const startTimer = () => {
-    countdown = setInterval(() => {
-      setTimer((prev) => Number(prev) + 1);
-    }, 1000);
+    let countdown;
+    if (!gameOver && !gameWon) {
+      countdown = setInterval(() => {
+        setTimer((prev) => Number(prev) + 1);
+      }, 1000);
+    } else {
+      clearInterval(countdown);
+      setTimer(0);
+    }
   };
 
   const clickHandler = (e, y, x) => {
-    console.log(e.button);
+    e.stopPropagation();
+    if (gameOver || gameWon) {
+      startTimer();
+      return;
+    }
     if (!isPlaying) {
       setIsPlaying(true);
       startTimer();
@@ -93,13 +98,10 @@ const App = () => {
   };
 
   const checkGameOver = (y, x) => {
-    console.log("clickCount" + clickCount);
     let notClickedCount = level * level - bombCount - 1;
-    console.log("notClickedCount:" + notClickedCount);
     if (grid[y][x].isBomb) {
       setGameOver(true);
     } else if (clickCount === notClickedCount) {
-      console.log("won");
       setGameWon(true);
     }
   };
@@ -113,7 +115,12 @@ const App = () => {
 
     for (let j = 0; j < 3; j++) {
       for (let i = 0; i < 3; i++) {
-        if (yArr[j] < 0 || xArr[i] < 0 || yArr[j] > 8 || xArr[i] > 8) {
+        if (
+          yArr[j] < 0 ||
+          xArr[i] < 0 ||
+          yArr[j] > level - 1 ||
+          xArr[i] > level - 1
+        ) {
           break;
         } else if (gridCopy[xArr[i]][yArr[j]].isBomb) {
           numBombs++;
