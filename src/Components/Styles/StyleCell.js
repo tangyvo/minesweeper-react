@@ -13,12 +13,13 @@ export const StyleCell = styled.div`
              : "#8ECC39"};
          cursor: pointer;
          div {
+           font-family: Arial, Helvetica, sans-serif;
            align-self: center;
            font-size: ${(props) =>
              props.level === "21"
-               ? `.8rem`
+               ? `.75rem`
                : props.level === "15"
-               ? "1.5rem"
-               : "2rem"};
+               ? "1.2rem"
+               : "1.8rem"};
          }
        `;

@@ -13,6 +13,9 @@ const Game = ({ grid, level, clickHandler, gameOver }) => {
             key={col.index}
             index={col.index}
             isBomb={col.isBomb}
+            neighbourBombs={col.neighbourBombs}
+            x={col.x}
+            y={col.y}
             isClicked={col.isClicked}
             level={level}
             clickHandler={clickHandler}
