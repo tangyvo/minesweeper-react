@@ -1,11 +1,7 @@
-import React from 'react';
+import React from "react";
 
-const Flags = () => {
-    return (
-        <>
-        <p>🚩0</p>
-        </>
-    )
-}
+const Flags = ({ flagTotal }) => {
+    return <p>🚩{flagTotal}</p>;
+};
 
 export default Flags;

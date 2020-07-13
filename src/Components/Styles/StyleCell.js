@@ -19,7 +19,7 @@ export const StyleCell = styled.div`
              props.level === "21"
                ? `.75rem`
                : props.level === "15"
-               ? "1.2rem"
-               : "1.5rem"};
+               ? "1rem"
+               : "1.2rem"};
          }
        `;

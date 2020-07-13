@@ -12,17 +12,27 @@ const Cell = ({
   x,
   y,
   neighbourBombs,
+  addFlag,
+  isFlagged
+
 }) => {
-
-
   return (
     <StyleCell
       level={level}
       isClicked={isClicked}
+      onContextMenu={(e) => addFlag(e, y, x)}
       index={index}
-      onClick={(e) => clickHandler(e, y, x)}
+      onClick={() => clickHandler(y, x, index)}
     >
-      <div>{isBomb ? "💣" : neighbourBombs !== 0 ? neighbourBombs : ""}</div>
+      <div>
+        {isBomb && gameOver
+          ? "💣"
+          : isFlagged 
+          ? '🚩'
+          : neighbourBombs !== 0
+          ? neighbourBombs
+          : ""}
+      </div>
     </StyleCell>
   );
 };

@@ -9,11 +9,17 @@ export const StyleGameOver = styled.div`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 50px 25px;
+    padding: 40px 30px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     z-index: 1;
+    transition: 1s 1s ease;
+    
+    h2 {
+        text-align: center;
+        font-size: 2rem;
+    }
 
     button {
         margin: 1em 0;

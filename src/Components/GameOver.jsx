@@ -7,13 +7,13 @@ const GameOver = ({ gameOver, gameWon, reset }) => {
     <>
       {gameOver ? (
         <StyleGameOver>
-          GAME OVER
+          <h2>Game Over</h2>
           <button onClick={reset}>Play Again</button>
         </StyleGameOver>
       ) : 
         gameWon ? (
           <StyleGameOver>
-            YOU'VE WON
+            <h2>You've Won</h2>
             <button onClick={reset}>Play Again</button>
           </StyleGameOver>
         ):

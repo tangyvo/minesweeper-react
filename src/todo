@@ -1,11 +1,18 @@
 Bugs:
 ----
-Neighbour Count Bugs Top Row
-Neighbour Count other levels - FIXED
-Time Bugs
+
+
 
 To Do:
 -----
-Flag - right click
+
 Group selection
-Highlight selected Bomb 
+
+
+FIXED & DONE
+-----
+NeighbourBomb Count for other levels not correct
+Timer issues
+Neighbour Count Bugs Top Row
+Flag - right click
+flag bug - not working on first click

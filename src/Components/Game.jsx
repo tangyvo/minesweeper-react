@@ -4,7 +4,7 @@ import { StyleGame } from "./Styles/StyleGame";
 
 import Cell from "./Cell";
 
-const Game = ({ grid, level, clickHandler, gameOver }) => {
+const Game = ({ grid, level, clickHandler, gameOver, addFlag }) => {
   return (
     <StyleGame level={level}>
       {grid.map((row) =>
@@ -13,6 +13,7 @@ const Game = ({ grid, level, clickHandler, gameOver }) => {
             key={col.index}
             index={col.index}
             isBomb={col.isBomb}
+            isFlagged={col.isFlagged}
             neighbourBombs={col.neighbourBombs}
             x={col.x}
             y={col.y}
@@ -20,6 +21,7 @@ const Game = ({ grid, level, clickHandler, gameOver }) => {
             level={level}
             clickHandler={clickHandler}
             gameOver={gameOver}
+            addFlag={addFlag}
           />
         ))
       )}
