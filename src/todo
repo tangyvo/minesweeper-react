@@ -1,14 +1,3 @@
-Bugs:
-----
-
-
-
-To Do:
------
-
-Group selection
-
-
 FIXED & DONE
 -----
 NeighbourBomb Count for other levels not correct
@@ -16,3 +5,11 @@ Timer issues
 Neighbour Count Bugs Top Row
 Flag - right click
 flag bug - not working on first click
+flag bug - can't click after flag removal 
+Mobile design
+
+
+To Do:
+-----
+Group selection
+Double click

@@ -2,5 +2,8 @@ import styled from "styled-components";
 
 export const StyleBody = styled.div`
   width: 500px;
-  margin: 10px auto;
+
+  @media (max-width: 700px) {
+    width: 400px;
+  }
 `;
