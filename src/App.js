@@ -15,29 +15,28 @@ const App = () => {
   const [level, setLevel] = useState(9);
   const [grid, setGrid] = useState([]);
   const [bombs, setBombs] = useState([]);
-  let bombCount = 1;
+  let bombCount = level * 2;
   const [clickCount, setClickCount] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [flagTotal, setFlagTotal] = useState(bombCount);
-  const [emptyNeighbour, setEmptyNeighbour] = useState([]);
-  // const [isDoubleClick, setIsDoubleClick] = useState(0);
+  const [isBombsAdded, setIsBombsAdded] = useState(false);
 
   // reset game when switching levels
   useEffect(() => {
     reset();
   }, [level]);
 
-  // start and end timer
+  // timer starts/ends when game starts/ends
   useEffect(() => {
     const countDown = setInterval(() => {
       // dont increment timer when player wins or loses
       if (gameOver || gameWon) {
         return;
       }
-      // increment if game is in play
+      // increment second if game is in play
       else if (isPlaying) {
         setTimer((prev) => prev + 1);
       }
@@ -52,6 +51,12 @@ const App = () => {
     updateGrid();
   }, [bombs]);
 
+  useEffect(() => {
+    if (isBombsAdded) {
+      addNeighourBombCount();
+    }
+  }, [isBombsAdded]);
+
   // funct that resets everything
   const reset = () => {
     setGameOver(false);
@@ -62,6 +67,7 @@ const App = () => {
     setTimer(0);
     calcBomb();
     updateGrid();
+    setIsBombsAdded(false);
   };
 
   // set level state
@@ -84,6 +90,7 @@ const App = () => {
 
   // update grid array and cell object
   const updateGrid = () => {
+    if (bombs.length !== bombCount) return;
     let gridCopy = [];
     for (let y = 0; y < level; y++) {
       gridCopy.push([]);
@@ -94,39 +101,14 @@ const App = () => {
           x: x,
           isBomb: bombs.includes(y * level + x) ? true : false,
           isClicked: false,
-          neighbourBombs: null,
+          neighbourBombs: 0,
           isFlagged: false,
         });
       }
     }
     setGrid([...gridCopy]);
+    setIsBombsAdded(true);
   };
-
-  const clickHandler = (y, x) => {
-    singleClick(y, x);
-    // console.log(isDoubleClick);
-    // setIsDoubleClick((prev) => prev + 1);
-    // let timeout = setTimeout(() => {
-    //   clicks(y, x);
-    // if (isDoubleClick > 0) {
-    //   addFlag(y, x);
-    //   console.log("isDoubleClick");
-    // } else {
-    //   singleClick(y, x);
-    //   console.log("single click", isDoubleClick);
-    // }
-    //   setIsDoubleClick(0);
-    //   return clearTimeout(timeout);
-    // }, 1000);
-  };
-
-  // const clicks = (y, x) => {
-  //   if (isDoubleClick > 0) {
-  //     addFlag(y, x);
-  //   } else {
-  //     singleClick(y, x);
-  //   }
-  // };
 
   // add and remove flag from grid object
   const rightClick = (e, y, x) => {
@@ -151,18 +133,20 @@ const App = () => {
   };
 
   const singleClick = (y, x) => {
-    // set playing to false when player loses or wins
-    if (gameOver || gameWon) {
-      setIsPlaying(false);
-      return;
-    }
-    // on first turn set playing to true
+    // on first turn set playing to true (to start timer)
     if (!isPlaying) {
       setIsPlaying(true);
     }
-    // check no. of bombs nearby and if bomb was activated
-    calcNeighbourBombs(x, y);
+    // check if bomb was activated
     checkGameOver(y, x);
+
+    // set cell's click state to true
+    let gridCopy = JSON.parse(JSON.stringify(grid));
+    gridCopy[y][x].isClicked = true;
+    setGrid(gridCopy);
+
+    // increment click count;
+    setClickCount((prev) => prev + 1);
   };
 
   // check if player has won or lost
@@ -177,21 +161,21 @@ const App = () => {
     }
   };
 
-  const calcEmptyArea = () => {
-    // 1. iterate through neighbours to find empty ones
-
-    emptyNeighbour.forEach((neighbour, index) => {
-
-      console.log(grid[neighbour[0]][neighbour[1]])
-    });
-    
+  const addNeighourBombCount = () => {
+    let gridCopy = JSON.parse(JSON.stringify(grid));
+    let numBombs = 0;
+    for (let y = 0; y < level; y++) {
+      for (let x = 0; x < level; x++) {
+        numBombs = calcNeighbourBombs(y, x);
+        gridCopy[x][y].neighbourBombs = numBombs;
+      }
+    }
+    setGrid([...gridCopy]);
   };
 
   const calcNeighbourBombs = (y, x) => {
-    //  made deep copy of grid
-    let gridCopy = JSON.parse(JSON.stringify(grid));
-
     let numBombs = 0;
+    // arrays to determine x and y values above and below current cell
     const yArr = [y - 1, y, y + 1];
     const xArr = [x - 1, x, x + 1];
 
@@ -208,26 +192,12 @@ const App = () => {
           (i === 1 && j === 1)
         ) {
           continue;
-        } else if (gridCopy[xArr[i]][yArr[j]].isBomb) {
+        } else if (grid[xArr[i]][yArr[j]].isBomb) {
           numBombs++;
-        } 
-        setEmptyNeighbour(prev => [...prev, [xArr[i], yArr[j]]]);
-        gridCopy[x][y].neighbourBombs = numBombs;
-      }
-      if (!gridCopy[x][y].isClicked) {
-        gridCopy[x][y].isClicked = true;
-        setClickCount((prev) => prev + 1);
+        }
       }
     }
-
-    if (numBombs === 0) {
-      console.log("no bombs");
-      console.log(emptyNeighbour);
-      calcEmptyArea();
-    } else {
-      setEmptyNeighbour([]);
-    }
-    setGrid(gridCopy);
+    return numBombs;
   };
 
   return (
@@ -244,7 +214,7 @@ const App = () => {
           grid={grid}
           level={level}
           bombs={bombs}
-          clickHandler={clickHandler}
+          singleClick={singleClick}
           gameOver={gameOver}
           rightClick={rightClick}
         />

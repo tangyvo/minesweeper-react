@@ -3,7 +3,9 @@ import React from "react";
 const Timer = ({ timer }) => {
   return (
     <p>
-      ⏱️
+      <span role="img" aria-label="timer">
+        ⏱️
+      </span>
       {timer === 0
         ? "000"
         : timer < 10

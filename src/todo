@@ -7,6 +7,8 @@ Flag - right click
 flag bug - not working on first click
 flag bug - can't click after flag removal 
 Mobile design
+Calculate all Neighbourbombs at the start
+Fix rendering when game restarts
 
 
 To Do:
