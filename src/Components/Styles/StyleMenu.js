@@ -18,6 +18,7 @@ export const StyleMenu = styled.div`
   p {
     font-size: 1rem;
     color: white;
+    font-weight: 600;
   }
 
   .best-time {

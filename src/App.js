@@ -296,6 +296,7 @@ const App = () => {
   return (
     <>
       <StyleBody>
+        <h1>Minesweeper</h1>
         <StyleMenu>
           <Level levelChange={levelChange} level={level} />
           <Flags flagTotal={flagTotal} />

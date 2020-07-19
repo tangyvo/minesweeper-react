@@ -3,7 +3,11 @@ import styled from "styled-components";
 export const StyleCell = styled.div`
   display: flex;
   justify-content: center;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; /* Disable selection/copy in UIWebView */
   outline: none;
+  border: 1px solid lightgray;
   background-color: ${(props) =>
     props.isClicked && props.index % 2 === 0
       ? "#E5C29F"
@@ -12,20 +16,20 @@ export const StyleCell = styled.div`
       : props.index % 2 === 0
       ? "#A7D947"
       : "#8ECC39"};
-  color : ${(props) =>
+  color: ${(props) =>
     props.neighbourBombs === 1
       ? "blue"
       : props.neighbourBombs === 2
       ? "green"
-      : props.neighbourBombs === 3 
-      ? 'red'
+      : props.neighbourBombs === 3
+      ? "red"
       : props.neighbourBombs === 4
-      ? 'purple' 
+      ? "purple"
       : props.neighbourBombs === 5
-      ? 'orange'
+      ? "orange"
       : props.neighbourBombs === 6
-      ? 'black'
-      : 'yellow'};
+      ? "black"
+      : "yellow"};
   cursor: pointer;
   div {
     font-family: Arial, Helvetica, sans-serif;
