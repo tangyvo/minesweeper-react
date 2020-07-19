@@ -17,7 +17,7 @@ import GameOver from "./Components/GameOver";
 import BestTime from "./Components/BestTime";
 
 const App = () => {
-  const [level, setLevel] = useState(9);
+  const [level, setLevel] = useState(7);
   const [grid, setGrid] = useState([]);
   const [bombs, setBombs] = useState([]);
   let bombCount = Math.floor(level * 1.5);
@@ -312,7 +312,7 @@ const App = () => {
           touchStart={touchStart}
           touchEnd={touchEnd}
         />
-        <GameOver gameOver={gameOver} gameWon={gameWon} reset={reset} />
+        <GameOver gameOver={gameOver} gameWon={gameWon} reset={(gameOver || gameWon) ? reset : null} />
         <StyleMenu>
           <BestTime bestTime={bestTime} />
         </StyleMenu>
