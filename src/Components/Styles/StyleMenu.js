@@ -3,9 +3,10 @@ import styled from "styled-components";
 export const StyleMenu = styled.div`
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   background-color: green;
   height: 60px;
+  padding: 0 50px;
 
   select {
     height: 35px;
@@ -18,8 +19,9 @@ export const StyleMenu = styled.div`
     font-size: 1rem;
     color: white;
   }
-  
+
   .best-time {
+    margin: auto;
     text-align: center;
     align-self: center;
 

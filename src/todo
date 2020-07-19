@@ -10,10 +10,10 @@ Mobile design
 Calculate all Neighbourbombs at the start
 Fix rendering when game restarts
 Add best time in locale storage
+Long press on mobile to add flag
 
 To Do:
 -----
 1. Group selection BUG
-2. Long press on mobile to add flag
 3. Refactor code
 4. Stop excessive rendering

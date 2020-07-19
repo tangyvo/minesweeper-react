@@ -17,7 +17,6 @@ const BestTime = ({ bestTime }) => (
       : bestTime < 100
       ? ` 0${bestTime}s`
       : ` ${bestTime}`}
-    <br></br>
     <BrowserView>
       <span>Right click to insert a flag</span>
     </BrowserView>

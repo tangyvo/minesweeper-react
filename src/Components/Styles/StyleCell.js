@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const StyleCell = styled.div`
   display: flex;
   justify-content: center;
+  outline: none;
   background-color: ${(props) =>
     props.isClicked && props.index % 2 === 0
       ? "#E5C29F"
