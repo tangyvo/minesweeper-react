@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 
+// import device detection
+
+import { isBrowser, isMobile } from 'react-device-detect';
+
 // import styling
 import { StyleMenu } from "./Components/Styles/StyleMenu";
 import { StyleBody } from "./Components/Styles/StyleBody";
@@ -27,12 +31,13 @@ const App = () => {
   const [revealMultiple, setRevealMultiple] = useState([]);
   const [showCells, setShowCells] = useState(false);
   const [bestTime, setBestTime] = useState(0);
+  const [longPress, setLongPress] = useState(0);
 
   // retreive best time on page load
   useEffect(() => {
     if (localStorage.getItem("minesweeperBestTime")) {
       setBestTime(localStorage.getItem("minesweeperBestTime"));
-    } 
+    }
   }, []);
 
   // reset game when switching levels
@@ -154,7 +159,7 @@ const App = () => {
 
   // runs when player clicks on a cell
   const singleClick = (y, x) => {
-    // check if its a quick
+    if (isMobile) return;
 
     // on first turn set playing to true (to start timer)
     if (!isPlaying) {
@@ -162,7 +167,8 @@ const App = () => {
     }
 
     // return if cell is already clicked or flagged or game over or game won
-    if (grid[y][x].isClicked || grid[y][x].isFlagged || gameOver || gameWon) return;
+    if (grid[y][x].isClicked || grid[y][x].isFlagged || gameOver || gameWon)
+      return;
 
     // set cell's click state to true
     let gridCopy = JSON.parse(JSON.stringify(grid));
@@ -273,6 +279,22 @@ const App = () => {
     return numBombs;
   };
 
+  // record time when user presses on screen
+  const touchStart = () => {
+    let time = new Date().getTime();
+    setLongPress(time)
+  };
+
+  // add flag if its a long press else run single click function
+  const touchEnd = (y, x) => {
+    let timeDiff = new Date().getTime() - longPress;
+    if (timeDiff < 400) {
+      singleClick(y, x)
+    } else {
+      addFlag(y, x)
+    }
+  };
+
   return (
     <>
       <StyleBody>
@@ -288,6 +310,8 @@ const App = () => {
           singleClick={singleClick}
           gameOver={gameOver}
           rightClick={rightClick}
+          touchStart={touchStart}
+          touchEnd={touchEnd}
         />
         <GameOver gameOver={gameOver} gameWon={gameWon} reset={reset} />
         <StyleMenu>

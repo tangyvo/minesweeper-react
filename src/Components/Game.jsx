@@ -4,10 +4,10 @@ import { StyleGame } from "./Styles/StyleGame";
 
 import Cell from "./Cell";
 
-const Game = ({ grid, level, singleClick, gameOver, rightClick }) => {
+const Game = ({ grid, level, singleClick, gameOver, rightClick, touchStart, touchEnd }) => {
   return (
     <StyleGame level={level}>
-    { console.log('load game') }
+    {/* { console.log('load game') } */}
       {grid.map((row) =>
         row.map((col) => (
           <Cell
@@ -23,6 +23,8 @@ const Game = ({ grid, level, singleClick, gameOver, rightClick }) => {
             singleClick={singleClick}
             gameOver={gameOver}
             rightClick={rightClick}
+            touchStart={touchStart}
+            touchEnd={touchEnd}
           />
         ))
       )}

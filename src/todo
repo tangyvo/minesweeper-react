@@ -13,5 +13,7 @@ Add best time in locale storage
 
 To Do:
 -----
-Group selection BUG
-Double click
+1. Group selection BUG
+2. Long press on mobile to add flag
+3. Refactor code
+4. Stop excessive rendering

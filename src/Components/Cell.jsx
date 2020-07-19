@@ -15,18 +15,22 @@ const Cell = ({
   neighbourBombs,
   rightClick,
   isFlagged,
+  touchStart, 
+  touchEnd, 
 }) => {
   return (
     <StyleCell
       level={level}
       isClicked={isClicked}
       onContextMenu={(e) => rightClick(e, y, x)}
+      onTouchStart={touchStart}
+      onTouchEnd={() => touchEnd(y, x)}
       index={index}
       onClick={() => singleClick(y, x)}
       neighbourBombs={neighbourBombs}
     >
+      {console.log('cell load')}
       <div>
-        {console.log('load Cell')}
         {
           isBomb && gameOver
           ? "💣"
@@ -42,4 +46,4 @@ const Cell = ({
   );
 };
 
-export default Cell;
+export default React.memo(Cell);
