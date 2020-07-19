@@ -3,15 +3,14 @@ import React from "react";
 const Timer = ({ timer }) => {
   return (
     <p>
-      <span role="img" aria-label="timer">
-        ⏱️
-      </span>
+      <span className="emoji" role="img" aria-label="timer">
+        ⏱️ </span>
       {timer === 0
         ? "000"
         : timer < 10
-        ? "00" + timer
+        ? "00" + timer + 's'
         : timer < 100
-        ? "0" + timer
+        ? "0" + timer + 's'
         : timer}
     </p>
   );

@@ -2,6 +2,7 @@ import React from "react";
 
 import { StyleCell } from "./Styles/StyleCell";
 
+
 const Cell = ({
   index,
   isBomb,
@@ -25,6 +26,7 @@ const Cell = ({
       neighbourBombs={neighbourBombs}
     >
       <div>
+        {console.log('load Cell')}
         {
           isBomb && gameOver
           ? "💣"

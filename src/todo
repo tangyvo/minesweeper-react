@@ -9,9 +9,9 @@ flag bug - can't click after flag removal
 Mobile design
 Calculate all Neighbourbombs at the start
 Fix rendering when game restarts
-
+Add best time in locale storage
 
 To Do:
 -----
-Group selection
+Group selection BUG
 Double click

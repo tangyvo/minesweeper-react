@@ -7,6 +7,7 @@ import Cell from "./Cell";
 const Game = ({ grid, level, singleClick, gameOver, rightClick }) => {
   return (
     <StyleGame level={level}>
+    { console.log('load game') }
       {grid.map((row) =>
         row.map((col) => (
           <Cell
@@ -29,4 +30,4 @@ const Game = ({ grid, level, singleClick, gameOver, rightClick }) => {
   );
 };
 
-export default Game;
+export default React.memo(Game);

@@ -10,12 +10,13 @@ import Level from "./Components/Level";
 import Flags from "./Components/Flags";
 import Timer from "./Components/Timer";
 import GameOver from "./Components/GameOver";
+import BestTime from "./Components/BestTime";
 
 const App = () => {
   const [level, setLevel] = useState(9);
   const [grid, setGrid] = useState([]);
   const [bombs, setBombs] = useState([]);
-  let bombCount = level;
+  let bombCount = level * 2;
   const [clickCount, setClickCount] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
@@ -25,7 +26,14 @@ const App = () => {
   const [isBombsAdded, setIsBombsAdded] = useState(false);
   const [revealMultiple, setRevealMultiple] = useState([]);
   const [showCells, setShowCells] = useState(false);
-  const [cellsToCheck, setCellsToCheck] = useState([]);
+  const [bestTime, setBestTime] = useState(0);
+
+  // retreive best time on page load
+  useEffect(() => {
+    if (localStorage.getItem("minesweeperBestTime")) {
+      setBestTime(localStorage.getItem("minesweeperBestTime"));
+    } 
+  }, []);
 
   // reset game when switching levels
   useEffect(() => {
@@ -35,8 +43,15 @@ const App = () => {
   // timer starts/ends when game starts/ends
   useEffect(() => {
     const countDown = setInterval(() => {
-      // dont increment timer when player wins or loses
-      if (gameOver || gameWon) {
+      // dont increment timer when player loses
+      if (gameOver) {
+        return;
+      }
+      // if player won don't increment timer and check best time
+      else if (gameWon) {
+        if (timer < bestTime || !localStorage.getItem("minesweeperBestTime")) {
+          localStorage.setItem("minesweeperBestTime", timer);
+        }
         return;
       }
       // increment second if game is in play
@@ -62,6 +77,7 @@ const App = () => {
 
   // funct that resets everything
   const reset = () => {
+    setBestTime(localStorage.getItem("minesweeperBestTime"));
     setGameOver(false);
     setGameWon(false);
     setIsPlaying(false);
@@ -138,20 +154,26 @@ const App = () => {
 
   // runs when player clicks on a cell
   const singleClick = (y, x) => {
+    // check if its a quick
+
     // on first turn set playing to true (to start timer)
     if (!isPlaying) {
       setIsPlaying(true);
     }
+
+    // return if cell is already clicked or flagged or game over or game won
+    if (grid[y][x].isClicked || grid[y][x].isFlagged || gameOver || gameWon) return;
+
     // set cell's click state to true
     let gridCopy = JSON.parse(JSON.stringify(grid));
     gridCopy[y][x].isClicked = true;
     setGrid(gridCopy);
 
-    // check if bomb was activated
-    if (checkGameOver(y, x)) return;
-
     // increment click count;
     setClickCount((prev) => prev + 1);
+
+    // check if bomb was activated
+    if (checkGameOver(y, x)) return;
 
     // if cell has no neighbouring bombs display multiple cells
     if (grid[y][x].neighbourBombs === 0) {
@@ -160,8 +182,6 @@ const App = () => {
   };
 
   const displayMultiple = (y, x) => {
-    setCellsToCheck([]);
-
     const yArr = [y - 1, y, y + 1];
     const xArr = [x - 1, x, x + 1];
 
@@ -171,50 +191,34 @@ const App = () => {
           yArr[j] < 0 ||
           xArr[i] < 0 ||
           yArr[j] > level - 1 ||
-          xArr[i] > level - 1
+          xArr[i] > level - 1 ||
+          (i === 1 && j === 1)
         ) {
           continue;
-        } else if (!grid[yArr[j]][xArr[i]].isFlagged) {
+        } else if (
+          !grid[yArr[j]][xArr[i]].isFlagged &&
+          !grid[yArr[j]][xArr[i]].isClicked
+        ) {
+          setClickCount((prev) => prev + 1);
           setRevealMultiple((prev) => [...prev, [yArr[j], xArr[i]]]);
-
-          // check if neighbouring cells also contain blanks
-          if (
-            grid[yArr[j]][xArr[i]].neighbourBombs === 0 &&
-            (j !== 1 || i !== 1) &&
-            !grid[yArr[j]][xArr[i]].isClicked
-          ) {
-            console.log(grid[yArr[j]][xArr[i]]);
-            setCellsToCheck((prev) => [...prev, [yArr[j], xArr[i]]]);
-          }
         }
       }
-    }
-    if (cellsToCheck.length > 0) {
-      let array = [...setCellsToCheck];
-      array.forEach((cell) => {
-        displayMultiple(cell[0], cell[1]);
-        console.log("display multiple");
-      });
-
     }
     setShowCells(true);
   };
 
   useEffect(() => {
     if (!showCells) return;
-    reveal();
-    setRevealMultiple([]);
-    setShowCells(false);
-  }, [showCells]);
 
-  const reveal = () => {
+    // set neighbouring cells with no bombs to clicked
     let gridCopy = JSON.parse(JSON.stringify(grid));
     [...revealMultiple].forEach((a) => {
       gridCopy[a[0]][a[1]].isClicked = true;
     });
-
     setGrid(gridCopy);
-  };
+    setRevealMultiple([]);
+    setShowCells(false);
+  }, [showCells]);
 
   // check if player has won or lost
   const checkGameOver = (y, x) => {
@@ -236,7 +240,7 @@ const App = () => {
     for (let y = 0; y < level; y++) {
       for (let x = 0; x < level; x++) {
         numBombs = calcNeighbourBombs(y, x);
-        gridCopy[x][y].neighbourBombs = numBombs;
+        gridCopy[y][x].neighbourBombs = numBombs;
       }
     }
     setGrid([...gridCopy]);
@@ -251,7 +255,7 @@ const App = () => {
     // loop through neighbouring cells and count how many contains bombs
     for (let j = 0; j < 3; j++) {
       for (let i = 0; i < 3; i++) {
-        if (grid[x][y].isFlagged) return;
+        if (grid[y][x].isFlagged) return;
 
         if (
           yArr[j] < 0 ||
@@ -261,7 +265,7 @@ const App = () => {
           (i === 1 && j === 1)
         ) {
           continue;
-        } else if (grid[xArr[i]][yArr[j]].isBomb) {
+        } else if (grid[yArr[j]][xArr[i]].isBomb) {
           numBombs++;
         }
       }
@@ -278,8 +282,6 @@ const App = () => {
           <Timer timer={timer} />
         </StyleMenu>
         <Game
-          role="button"
-          tabIndex="0"
           grid={grid}
           level={level}
           bombs={bombs}
@@ -288,6 +290,9 @@ const App = () => {
           rightClick={rightClick}
         />
         <GameOver gameOver={gameOver} gameWon={gameWon} reset={reset} />
+        <StyleMenu>
+          <BestTime bestTime={bestTime} />
+        </StyleMenu>
       </StyleBody>
     </>
   );
