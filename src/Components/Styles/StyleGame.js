@@ -8,6 +8,6 @@ export const StyleGame = styled.div`
     align-self: center;
 
     @media (max-width: 700px) {
-        height: 300px;
+        height: 400px;
     }
 `;

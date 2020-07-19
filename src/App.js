@@ -159,8 +159,6 @@ const App = () => {
 
   // runs when player clicks on a cell
   const singleClick = (y, x) => {
-    if (isMobile) return;
-
     // on first turn set playing to true (to start timer)
     if (!isPlaying) {
       setIsPlaying(true);

@@ -1,5 +1,7 @@
 import React from "react";
 
+import { isBrowser } from 'react-device-detect';
+
 import { StyleCell } from "./Styles/StyleCell";
 
 
@@ -22,25 +24,22 @@ const Cell = ({
     <StyleCell
       level={level}
       isClicked={isClicked}
-      onContextMenu={(e) => rightClick(e, y, x)}
       onTouchStart={touchStart}
       onTouchEnd={() => touchEnd(y, x)}
+      // onContextMenu={(e) => isBrowser ? rightClick(e, y, x) : ''}
       index={index}
       onClick={() => singleClick(y, x)}
       neighbourBombs={neighbourBombs}
     >
-      {console.log('cell load')}
+      {console.log("cell load")}
       <div>
-        {
-          isBomb && gameOver
+        {isBomb && gameOver
           ? "💣"
-          : isFlagged 
+          : isFlagged
           ? "🚩"
           : neighbourBombs !== 0 && isClicked
           ? neighbourBombs
-          : ''
-        }
-
+          : ""}
       </div>
     </StyleCell>
   );

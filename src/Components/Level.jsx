@@ -5,8 +5,8 @@ const Level = ({ level, levelChange }) => {
     <>
       <select onChange={levelChange} value={level}>
         <option value="9">Easy</option>
-        <option value="15">Medium</option>
-        <option value="21">Hard</option>
+        <option value="11">Medium</option>
+        <option value="13">Hard</option>
       </select>
     </>
   );
