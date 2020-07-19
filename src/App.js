@@ -286,7 +286,7 @@ const App = () => {
   // add flag if its a long press else run single click function
   const touchEnd = (y, x) => {
     let timeDiff = new Date().getTime() - longPress;
-    if (timeDiff < 400) {
+    if (timeDiff < 250) {
       singleClick(y, x)
     } else {
       addFlag(y, x)

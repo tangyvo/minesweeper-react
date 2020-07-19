@@ -4,7 +4,7 @@ export const StyleMenu = styled.div`
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: space-between;
-  background-color: green;
+  background-color: rgb(77, 133, 77);
   height: 60px;
   padding: 0 50px;
 
@@ -27,7 +27,7 @@ export const StyleMenu = styled.div`
     align-self: center;
 
     span {
-      font-size: .75rem;
+      font-size: 0.75rem;
     }
   }
 `;

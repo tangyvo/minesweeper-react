@@ -7,7 +7,7 @@ export const StyleCell = styled.div`
   -webkit-touch-callout: none;
   -webkit-user-select: none; /* Disable selection/copy in UIWebView */
   outline: none;
-  border: 1px solid lightgray;
+  border: 1px solid rgb(77, 133, 77);
   background-color: ${(props) =>
     props.isClicked && props.index % 2 === 0
       ? "#E5C29F"
@@ -35,10 +35,6 @@ export const StyleCell = styled.div`
     font-family: Arial, Helvetica, sans-serif;
     align-self: center;
     font-size: ${(props) =>
-      props.level === "21"
-        ? `.7rem`
-        : props.level === "15"
-        ? "1rem"
-        : "1.2rem"};
+      props.level === "15" ? `.7rem` : props.level === "9" ? "1rem" : "1.2rem"};
   }
 `;
