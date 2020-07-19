@@ -20,7 +20,7 @@ const App = () => {
   const [level, setLevel] = useState(9);
   const [grid, setGrid] = useState([]);
   const [bombs, setBombs] = useState([]);
-  let bombCount = level * 2;
+  let bombCount = Math.floor(level * 1.5);
   const [clickCount, setClickCount] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
