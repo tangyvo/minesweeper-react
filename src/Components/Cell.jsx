@@ -22,14 +22,17 @@ const Cell = ({
       onContextMenu={(e) => rightClick(e, y, x)}
       index={index}
       onClick={() => singleClick(y, x)}
+      neighbourBombs={neighbourBombs}
     >
       <div>
         {
-          isBomb 
+          isBomb && gameOver
           ? "💣"
           : isFlagged 
           ? "🚩"
-          : neighbourBombs
+          : neighbourBombs !== 0 && isClicked
+          ? neighbourBombs
+          : ''
         }
 
       </div>

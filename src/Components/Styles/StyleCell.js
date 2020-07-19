@@ -11,6 +11,20 @@ export const StyleCell = styled.div`
       : props.index % 2 === 0
       ? "#A7D947"
       : "#8ECC39"};
+  color : ${(props) =>
+    props.neighbourBombs === 1
+      ? "blue"
+      : props.neighbourBombs === 2
+      ? "green"
+      : props.neighbourBombs === 3 
+      ? 'red'
+      : props.neighbourBombs === 4
+      ? 'purple' 
+      : props.neighbourBombs === 5
+      ? 'orange'
+      : props.neighbourBombs === 6
+      ? 'black'
+      : 'yellow'};
   cursor: pointer;
   div {
     font-family: Arial, Helvetica, sans-serif;

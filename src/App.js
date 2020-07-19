@@ -15,7 +15,7 @@ const App = () => {
   const [level, setLevel] = useState(9);
   const [grid, setGrid] = useState([]);
   const [bombs, setBombs] = useState([]);
-  let bombCount = level * 2;
+  let bombCount = level;
   const [clickCount, setClickCount] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
@@ -23,6 +23,9 @@ const App = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [flagTotal, setFlagTotal] = useState(bombCount);
   const [isBombsAdded, setIsBombsAdded] = useState(false);
+  const [revealMultiple, setRevealMultiple] = useState([]);
+  const [showCells, setShowCells] = useState(false);
+  const [cellsToCheck, setCellsToCheck] = useState([]);
 
   // reset game when switching levels
   useEffect(() => {
@@ -118,6 +121,7 @@ const App = () => {
     addFlag(y, x);
   };
 
+  // adds flag to a cell
   const addFlag = (y, x) => {
     let gridCopy = JSON.parse(JSON.stringify(grid));
 
@@ -132,21 +136,84 @@ const App = () => {
     setGrid(gridCopy);
   };
 
+  // runs when player clicks on a cell
   const singleClick = (y, x) => {
     // on first turn set playing to true (to start timer)
     if (!isPlaying) {
       setIsPlaying(true);
     }
-    // check if bomb was activated
-    checkGameOver(y, x);
-
     // set cell's click state to true
     let gridCopy = JSON.parse(JSON.stringify(grid));
     gridCopy[y][x].isClicked = true;
     setGrid(gridCopy);
 
+    // check if bomb was activated
+    if (checkGameOver(y, x)) return;
+
     // increment click count;
     setClickCount((prev) => prev + 1);
+
+    // if cell has no neighbouring bombs display multiple cells
+    if (grid[y][x].neighbourBombs === 0) {
+      displayMultiple(y, x);
+    }
+  };
+
+  const displayMultiple = (y, x) => {
+    setCellsToCheck([]);
+
+    const yArr = [y - 1, y, y + 1];
+    const xArr = [x - 1, x, x + 1];
+
+    for (let j = 0; j < 3; j++) {
+      for (let i = 0; i < 3; i++) {
+        if (
+          yArr[j] < 0 ||
+          xArr[i] < 0 ||
+          yArr[j] > level - 1 ||
+          xArr[i] > level - 1
+        ) {
+          continue;
+        } else if (!grid[yArr[j]][xArr[i]].isFlagged) {
+          setRevealMultiple((prev) => [...prev, [yArr[j], xArr[i]]]);
+
+          // check if neighbouring cells also contain blanks
+          if (
+            grid[yArr[j]][xArr[i]].neighbourBombs === 0 &&
+            (j !== 1 || i !== 1) &&
+            !grid[yArr[j]][xArr[i]].isClicked
+          ) {
+            console.log(grid[yArr[j]][xArr[i]]);
+            setCellsToCheck((prev) => [...prev, [yArr[j], xArr[i]]]);
+          }
+        }
+      }
+    }
+    if (cellsToCheck.length > 0) {
+      let array = [...setCellsToCheck];
+      array.forEach((cell) => {
+        displayMultiple(cell[0], cell[1]);
+        console.log("display multiple");
+      });
+
+    }
+    setShowCells(true);
+  };
+
+  useEffect(() => {
+    if (!showCells) return;
+    reveal();
+    setRevealMultiple([]);
+    setShowCells(false);
+  }, [showCells]);
+
+  const reveal = () => {
+    let gridCopy = JSON.parse(JSON.stringify(grid));
+    [...revealMultiple].forEach((a) => {
+      gridCopy[a[0]][a[1]].isClicked = true;
+    });
+
+    setGrid(gridCopy);
   };
 
   // check if player has won or lost
@@ -159,6 +226,8 @@ const App = () => {
       setGameWon(true);
       setIsPlaying(false);
     }
+
+    if (grid[y][x].isBomb) return true;
   };
 
   const addNeighourBombCount = () => {
